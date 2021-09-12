@@ -1,0 +1,16 @@
+class User
+{
+    static int i=0;
+    String user_name,password,user_id;
+    String firm_name;
+    User(String user_name, String password, String firm_name)
+    {
+        this.user_name=user_name;
+        this.password=password;
+        this.user_id=i;
+        this.firm_name=firm_name;
+        i++;
+    }
+
+}
+class 

@@ -1,0 +1,189 @@
+public class Main implements color{
+    static String firm_name,user_name,password;
+    static Scanner sc=new Scanner(System.in);
+    static Manage[] user= new Manage[100];
+    static int i=0;
+    public static void main(String args[])
+    {
+        System.out.println();
+        System.out.println(GREEN);
+
+        System.out.println("                       #                #  # # # #  #          # # #    # #     #         #   # # # #          ");
+        System.out.println("                        #      #       #   #        #        #        #     #   # #     # #   #                                   ");
+        System.out.println("                         #   #   #    #    # # #    #        #        #     #   #  #   #  #   # # #               ");
+        System.out.println("                          # #     #  #     #        #        #        #     #   #    #    #   #                         ");
+        System.out.println("                           #       #       # # # #  # # # #    # # #    # #     #         #   # # # #                          ");
+        System.out.println(RESET+"\n");
+        run();
+    }
+    static void run()
+    {
+        System.out.println(BLUE+"==========================================================================");
+        System.out.println(YELLOW+"                        Welcome to LOGIN                                  ");
+        System.out.println(BLUE+"==========================================================================");
+        System.out.println(GREEN);
+        System.out.print("1. login\n2. create new Account \n3. exit: ");
+        System.out.println(RESET);
+        Scanner sc = new Scanner(System.in);
+        int n = Integer.parseInt(sc.nextLine());
+
+        if(n==1)
+        {
+            login();
+            run();
+        }
+        else if(n==2)
+        {
+            user[i]=sign_up();
+            i++;
+            run();
+        }
+        else if(n==3)
+            System.exit(0);
+        else  System.out.println(RED+"Oops! Invalid Input."+RESET);
+    }
+    static void login()
+    {
+        System.out.print(YELLOW+"USERNAME: ");
+        String user_name=sc.next();
+        System.out.print("PASSWORD: ");
+        String password=sc.nextLine();
+        password=sc.nextLine();
+        System.out.print(RESET);
+        for(int j=0;j<i;j++)
+        {
+            if(user[j].user_name.equals(user_name) && user[j].password.equals(password))
+            {
+                home(user[j]);
+            }
+        }
+        System.out.println(RED+"Invalid USERNAME or PASSWORD!! "+RESET);
+    }
+    static void home(Manage cur_user)
+    {
+        System.out.println(GREEN+"=================================================================================================================== ");
+        System.out.println(BLUE+"Welcome "+cur_user.user_name+" to HOME PAGE::");
+        System.out.println(GREEN+"=================================================================================================================== ");
+        System.out.print(RESET);
+        System.out.print(BLUE+"1. Enter Stocks\n2. View Stock\n3. Dispatch Stock\n4. Veiw Dispatched Stock\n5. Log Out --->  "+RESET);
+
+        int k=Integer.parseInt(sc.nextLine());
+        if(k==1)
+        {
+            cur_user.enter_stock();
+            System.out.println(GREEN+"loading....loading....loading....") ;
+            System.out.println("Stock Entered Successfully!!"+RESET);
+            home(cur_user);
+        }
+        else if(k==2)
+        {
+            int t;
+            System.out.print(PURPLE+"1. View whole Stock\n2. View Stock by Category\n3. View Stock by Supplier\n4. View Stock by Item Name --->  "+RESET);
+            t=Integer.parseInt(sc.nextLine());
+            if(t==1)
+            {
+                cur_user.view_stock();
+                home(cur_user);
+            }
+            else if(t==2)
+            {
+                System.out.print(YELLOW+"Enter the category: "+RESET);
+                String s=new String();
+                s=sc.nextLine();
+                cur_user.view_stock_category(s);
+                home(cur_user);
+            }
+            else if(t==3)
+            {
+                System.out.print(YELLOW+"Enter the Supplier Name: "+RESET);
+                String s=sc.nextLine();
+                cur_user.view_stock_supplier(s);
+                home(cur_user);
+            }
+            else if(t==4)
+            {
+                System.out.print(YELLOW+"Enter the Item Name: "+RESET);
+                String s=sc.nextLine();
+                cur_user.view_stock_itemname(s);
+                home(cur_user);
+            }
+            else
+            {
+                System.out.println(GREEN+"Oops! Invalid Input.");
+                System.out.println("Please Input Again."+RESET);
+                home(cur_user);
+            }
+
+        }
+        else if(k==3)
+        {
+            cur_user.view_stock();
+            System.out.print(BLUE+"Enter the Id of stock to dispatch:");
+            int id=Integer.parseInt(sc.nextLine());
+            System.out.print("Enter the quantity of item to be dispatched:"+RESET);
+            int q=Integer.parseInt(sc.nextLine());
+            boolean b=cur_user.dispatch_id(id,q);
+            if(b)
+            {
+                System.out.println(RED+"loading....loading....loading....") ;
+                System.out.println("Stock Dispatched Successfully!!"+RESET);
+            }
+            home(cur_user);
+        }
+        else if(k==4)
+        {
+            cur_user.view_dispatch_stock();
+            home(cur_user);
+        }
+        else if(k==5)
+        {
+            run();
+        }
+        else
+        {
+            System.out.println(RED+"Oops! Invalid Input.");
+            System.out.println("Please Input Again."+RESET);
+            home(cur_user);
+        }
+
+    }
+    static Manage sign_up()
+    {
+        System.out.println(GREEN+"=================================================================================================================== ");
+        System.out.println(YELLOW+"Creating new Account");
+        System.out.print(GREEN+"Firm Name:");
+        firm_name=sc.nextLine();
+        System.out.print(GREEN+"USERNAME: "+RESET);
+        boolean b=true;
+        while(b)
+        {
+            user_name=sc.nextLine();
+            b=check_username(user_name);
+            if(b) System.out.println(RED+"USERNAME Already taken!!"+RESET);
+        }
+        System.out.print(RED+"PASSWORD (MIN 5 CHARACTER): "+RESET);
+        b=true;
+        while(b)
+        {
+            password=sc.nextLine();
+            b=check_password(password);
+            if(b) System.out.println(YELLOW+"PASSWORD must be five charcters long."+RESET);
+        }
+        Manage u = new Manage(user_name,password,firm_name);
+        System.out.println(GREEN+"Account created Successfully!!"+RESET);
+        return u;
+    }
+    static boolean check_username(String s)
+    {
+        for(int j=0;j<i;j++)
+        {
+            if(s.equals(user[j].user_name)) return true;
+        }
+        return false;
+    }
+    static boolean check_password(String s)
+    {
+        if(s.length()<5) return true;
+        return false;
+    }
+}
